@@ -5,7 +5,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
-<BorderPane fx:controller="com.jacekduszenko.todolist.Controller"
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.GridPane?>
+<BorderPane fx:id="MainBorderPane" fx:controller="com.jacekduszenko.todolist.Controller"
             xmlns:fx="http://javafx.com/fxml">
     <left>
         <ListView fx:id="todolistview" onMouseClicked="#handleClickListView">
@@ -13,18 +18,19 @@
 
 
     </left>
-    <center>
-        <VBox>
-            <TextArea fx:id="textArea" editable="false"/>
-<HBox>
-    <Label text="Due: ">
+    <center >
+        <VBox style="-fx-background-color: 	#7CFC00">
+            <TextArea fx:id="textArea" editable="false" VBox.vgrow="ALWAYS"/>
+
+<HBox style="-fx-background-color: #7CFC00">
+    <Label text="Due: " style="-fx-background-color: #7CFC00">
         <font>
             <Font name ="Times New Roman bold" size="20"/>
         </font>
 
     </Label>
 
-    <Label fx:id="deadlineLabel" text="Due: ">
+    <Label fx:id="deadlineLabel" >
         <font>
             <Font name ="Times New Roman bold" size="20"/>
         </font>
@@ -35,4 +41,17 @@
         </VBox>
 
     </center>
+
+    <top>
+        <MenuBar>
+            <Menu text="file">
+                <items>
+                    <MenuItem text="New Event" onAction="#showNewItemDialog"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit"/>
+                </items>
+            </Menu>
+        </MenuBar>
+
+    </top>
 </BorderPane>
