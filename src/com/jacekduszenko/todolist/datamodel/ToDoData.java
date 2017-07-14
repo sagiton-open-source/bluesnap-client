@@ -2,6 +2,7 @@ package com.jacekduszenko.todolist.datamodel;
 
 import com.sun.xml.internal.fastinfoset.util.StringArray;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,7 +19,7 @@ public class ToDoData {
 
     private static ToDoData instance= new ToDoData();
     private static String fileName="data.txt";
-    private List<TodoItem> todoItems;
+    private ObservableList<TodoItem> todoItems;
     private DateTimeFormatter formatter;
 
     public static ToDoData getInstance() {
@@ -29,7 +30,7 @@ public class ToDoData {
         formatter=DateTimeFormatter.ofPattern("dd-MM-yyyy");
     }
 
-    public List<TodoItem> getTodoItems() {
+    public ObservableList<TodoItem> getTodoItems() {
         return todoItems;
     }
 
@@ -82,5 +83,9 @@ public class ToDoData {
 
     public void addTodoItem(TodoItem item) {
         todoItems.add(item);
+    }
+
+    public void deleteToDoItem(TodoItem item) {
+        todoItems.remove(item);
     }
 }
