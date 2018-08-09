@@ -4,14 +4,17 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+        jcenter()
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
@@ -23,9 +26,32 @@ repositories {
 	mavenCentral()
 }
 
+jar {
+    enabled = true
+}
 
 dependencies {
 	compileOnly group: 'org.projectlombok', name: 'lombok'
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+/*
+* Remember to provide credentials for Nexus!
+* These are configured by setting project properties: nexusUsername and nexusPassword.
+*
+* You can do that with properties file (in repo or in your home directory) but remember not to commit
+* that file!
+*
+* In CI environment you can use environment variables:
+*
+*     export ORG_GRADLE_PROJECT_nexusUsername=...
+*     export ORG_GRADLE_PROJECT_nexusPassword=...
+*
+* See:
+* https://docs.gradle.org/current/userguide/userguide_single.html?_ga=2.157422650.1235070294.1533801411-1191488433.1516802291#sec:project_properties
+*/
+nexus {
+    repositoryUrl = 'https://nexus.sagiton.pl/repository/maven-releases/'
+    snapshotRepositoryUrl = 'https://nexus.sagiton.pl/repository/maven-snapshots/'
 }
