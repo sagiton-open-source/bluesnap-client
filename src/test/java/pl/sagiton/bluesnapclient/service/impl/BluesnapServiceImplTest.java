@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.TestPropertySource;
 import pl.sagiton.bluesnapclient.model.cardtransaction.CardHolder;
 import pl.sagiton.bluesnapclient.model.cardtransaction.CardTransaction;
 import pl.sagiton.bluesnapclient.model.cardtransaction.CreditCard;
@@ -17,11 +16,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-@TestPropertySource
 public class BluesnapServiceImplTest {
     @Autowired
     private BluesnapServiceImpl bluesnapServiceImpl;

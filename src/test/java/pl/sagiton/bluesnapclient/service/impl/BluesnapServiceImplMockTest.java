@@ -6,7 +6,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 import pl.sagiton.bluesnapclient.model.cardtransaction.CardHolder;
 import pl.sagiton.bluesnapclient.model.cardtransaction.CardTransaction;
@@ -22,16 +21,12 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@TestPropertySource
 public class BluesnapServiceImplMockTest {
-    @Autowired
     private BluesnapServiceImpl bluesnapServiceImpl;
     private static final String VENDOR_ID = "10400732";
     private static final String SHOPPER_ID = "22804805";

@@ -7,8 +7,8 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class WalletResponse extends Wallet {
     private BillingContactInfo billingContactInfo;
 

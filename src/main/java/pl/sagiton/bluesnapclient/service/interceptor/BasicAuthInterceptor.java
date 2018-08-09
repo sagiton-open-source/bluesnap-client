@@ -1,6 +1,5 @@
 package pl.sagiton.bluesnapclient.service.interceptor;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -9,6 +8,7 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Base64;
 
 public class BasicAuthInterceptor implements ClientHttpRequestInterceptor {
 
@@ -26,7 +26,7 @@ public class BasicAuthInterceptor implements ClientHttpRequestInterceptor {
 
         //Build the auth-header
         final String auth = username + ":" + password;
-        final byte[] encodedAuth = Base64.encodeBase64( auth.getBytes( Charset.forName( "US-ASCII" ) ) );
+        final byte[] encodedAuth = Base64.getEncoder().encode( auth.getBytes( Charset.forName( "US-ASCII" ) ) );
         final String authHeader = "Basic " + new String( encodedAuth );
 
         //Add the auth-header
