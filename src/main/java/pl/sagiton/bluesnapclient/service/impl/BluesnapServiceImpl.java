@@ -1,6 +1,7 @@
 package pl.sagiton.bluesnapclient.service.impl;
 
 import lombok.extern.java.Log;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.HttpClientErrorException;
@@ -39,7 +40,7 @@ public class BluesnapServiceImpl implements BluesnapService {
     }
 
     @Override
-    public CardTransaction pay(CardTransaction cardTransaction) throws BluesnapException, BluesnapRESTException {
+    public CardTransaction pay(CardTransaction cardTransaction) throws BluesnapException {
         try {
             return restTemplate.postForObject(bluesnapRootUri + TRANSACTIONS_URI, cardTransaction, CardTransaction.class);
         } catch (HttpClientErrorException e) {
@@ -47,12 +48,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public VaultedShopper getVaultedShopper(String id) throws BluesnapException, BluesnapRESTException {
+    public VaultedShopper getVaultedShopper(String id) throws BluesnapException {
         try {
             return restTemplate.getForObject(bluesnapRootUri + VAULTED_SHOPPER_URI + "/" + id, VaultedShopper.class);
         } catch (HttpClientErrorException e) {
@@ -60,12 +61,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public VaultedShopper createVaultedShopper(VaultedShopper vaultedShopper) throws BluesnapException, BluesnapRESTException {
+    public VaultedShopper createVaultedShopper(VaultedShopper vaultedShopper) throws BluesnapException{
         try {
             return restTemplate.postForObject(bluesnapRootUri + VAULTED_SHOPPER_URI, vaultedShopper, VaultedShopper.class);
         } catch (HttpClientErrorException e) {
@@ -73,12 +74,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public void updateVaultedShopper(String id, VaultedShopper vaultedShopper) throws BluesnapException, BluesnapRESTException {
+    public void updateVaultedShopper(String id, VaultedShopper vaultedShopper) throws BluesnapException {
         try {
             restTemplate.put(bluesnapRootUri + VAULTED_SHOPPER_URI + "/" + id, vaultedShopper, VaultedShopper.class);
         } catch (HttpClientErrorException e) {
@@ -86,12 +87,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public URI createVendor(Vendor vendor) throws BluesnapException, BluesnapRESTException {
+    public URI createVendor(Vendor vendor) throws BluesnapException{
         try {
             return restTemplate.postForLocation(bluesnapRootUri + VENDORS_URI, vendor);
         } catch (HttpClientErrorException e) {
@@ -99,12 +100,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public Vendor getVendor(String id) throws BluesnapException, BluesnapRESTException {
+    public Vendor getVendor(String id) throws BluesnapException {
         try {
             return restTemplate.getForObject(bluesnapRootUri + VENDORS_URI + "/" + id, Vendor.class);
         } catch (HttpClientErrorException e) {
@@ -112,12 +113,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public void updateVendor(String id, @RequestBody Vendor vendor) throws BluesnapException, BluesnapRESTException {
+    public void updateVendor(String id, @RequestBody Vendor vendor) throws BluesnapException{
         try {
             restTemplate.put(bluesnapRootUri + VENDORS_URI + "/" + id, vendor, Vendor.class);
         } catch (HttpClientErrorException e) {
@@ -125,12 +126,12 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @Override
-    public VendorList getVendors() throws BluesnapException, BluesnapRESTException {
+    public VendorList getVendors() throws BluesnapException {
         try {
             return restTemplate.getForObject(bluesnapRootUri + VENDORS_URI, VendorList.class);
         } catch (HttpClientErrorException e) {
@@ -138,7 +139,7 @@ public class BluesnapServiceImpl implements BluesnapService {
             throw new BluesnapException(e.getStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         } catch (RestClientException e) {
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

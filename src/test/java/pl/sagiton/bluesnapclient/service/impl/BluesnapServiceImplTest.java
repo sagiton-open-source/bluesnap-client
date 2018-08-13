@@ -329,7 +329,7 @@ public class BluesnapServiceImplTest {
     @Test
     public void shouldThrowExceptionInsteadOfAddingVaultedShopper() {
         VaultedShopper vaultedShopper = buildBrokenVaultedShopper();
-        assertThrows(BluesnapRESTException.class, () -> bluesnapServiceImpl.createVaultedShopper(vaultedShopper));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.createVaultedShopper(vaultedShopper));
 
     }
 
@@ -348,7 +348,7 @@ public class BluesnapServiceImplTest {
     @Test
     public void shouldThrowExceptionInsteadOfAddingVendor() {
         Vendor vendor = buildBrokenVendor();
-        assertThrows(BluesnapRESTException.class, () -> bluesnapServiceImpl.createVendor(vendor));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.createVendor(vendor));
 
     }
 
@@ -367,7 +367,7 @@ public class BluesnapServiceImplTest {
     @Test
     public void shouldThrowRESTExceptionInsteadOfPayment() {
         CardTransaction cardTransaction = buildBrokenCardTransaction();
-        assertThrows(BluesnapRESTException.class, () -> bluesnapServiceImpl.pay(cardTransaction));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.pay(cardTransaction));
 
     }
 
