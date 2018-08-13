@@ -49,7 +49,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
          catch (RestClientException e){
              log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-             throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+             throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
          }
     }
     @Override
@@ -63,7 +63,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
     }
     @Override
@@ -77,7 +77,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
     }
     @Override
@@ -91,7 +91,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
     }
     @Override
@@ -105,7 +105,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
     }
     @Override
@@ -119,7 +119,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
     }
     @Override
@@ -133,7 +133,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
     }
 
@@ -148,7 +148,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         }
         catch (RestClientException e){
             log.log(Level.SEVERE, BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new RestClientException(e.getMessage(), e.fillInStackTrace());
+            throw new BluesnapRESTException(e.getMessage(), e.fillInStackTrace());
         }
    }
 

@@ -327,6 +327,25 @@ public class BluesnapServiceImplTest {
     }
 
     @Test
+    public void shouldThrowExceptionInsteadOfAddingVaultedShopper() {
+        VaultedShopper vaultedShopper = buildBrokenVaultedShopper();
+        assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.createVaultedShopper(vaultedShopper));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadUpdatingVaultedShopper() {
+        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID,null));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfGettingVaultedShopper() {
+        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.getVaultedShopper(null));
+
+    }
+
+    @Test
     public void shouldThrowExceptionInsteadOfAddingVendor() {
         Vendor vendor = buildBrokenVendor();
         assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.createVendor(vendor));
@@ -338,6 +357,19 @@ public class BluesnapServiceImplTest {
         assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.updateVendor(VENDOR_ID,null));
 
     }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfPayment() {
+        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.pay(null));
+
+    }
+    @Test
+    public void shouldThrowRESTExceptionInsteadOfPayment() {
+        CardTransaction cardTransaction = buildBrokenCardTransaction();
+        assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.pay(cardTransaction));
+
+    }
+
 
     private CardTransaction buildCardTransaction() {
         CardTransaction cardTransaction = new CardTransaction();
@@ -371,6 +403,40 @@ public class BluesnapServiceImplTest {
         cardTransaction.setVendorsInfo(vendorsInfo);
         return cardTransaction;
     }
+
+    private CardTransaction buildBrokenCardTransaction() {
+        CardTransaction cardTransaction = new CardTransaction();
+        cardTransaction.setAmount(50.0);
+        cardTransaction.setSoftDescriptor("DescTest");
+
+        CardHolder cardHolder = new CardHolder();
+        cardHolder.setFirstName("test1");
+        cardHolder.setLastName("tester");
+        cardHolder.setZip("53230");
+        cardHolder.setCountry("PL");
+        cardTransaction.setCardHolderInfo(cardHolder);
+
+        cardTransaction.setCurrency("EUR");
+
+        CreditCard creditCard = new CreditCard();
+        creditCard.setCardNumber("4263982640269299");
+        creditCard.setExpirationMonth(11);
+        creditCard.setExpirationYear(2018);
+        creditCard.setSecurityCode(111);
+        creditCard.setCardLastFourDigits("9299");
+        cardTransaction.setCreditCard(creditCard);
+       // cardTransaction.setCardTransactionType("AUTH_CAPTURE");
+
+        VendorsInfo vendorsInfo = new VendorsInfo();
+        List<VendorInfo> vendorsInfoList = new ArrayList<>();
+        VendorInfo vendorInfo = new VendorInfo();
+        vendorInfo.setVendorId(581181L);
+        vendorsInfoList.add(vendorInfo);
+        vendorsInfo.setVendorInfo(vendorsInfoList);
+        cardTransaction.setVendorsInfo(vendorsInfo);
+        return cardTransaction;
+    }
+
     private Vendor buildVendor() {
         //Mandatory
         Vendor vendor = new Vendor();
