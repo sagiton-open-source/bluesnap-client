@@ -19,14 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BluesnapServiceImplTest {
     @Autowired
     private BluesnapServiceImpl bluesnapServiceImpl;
     private static final String VENDOR_ID = "10400732";
-    private static final String SHOPPER_ID =  "22810565";
-    private static final String NEW_LAST_NAME ="NewLastName";
+    private static final String SHOPPER_ID = "22810565";
+    private static final String NEW_LAST_NAME = "NewLastName";
     private static final String NEW_FIRST_NAME = "NewName";
     private static final String NEW_ADDRESS = "new test address";
     private static final String VISA_TYPE = "VISA";
@@ -40,6 +39,7 @@ public class BluesnapServiceImplTest {
         MockitoAnnotations.initMocks(this);
         bluesnapServiceImpl = new BluesnapServiceImpl(BLUESNAP_ROOT_URI, BLUESNAP_USERNAME, BLUESNAP_PASSWORD);
     }
+
     @Test
     public void shouldCreateNewVendor() {
         Vendor vendor = buildVendor();
@@ -237,17 +237,17 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldUpdateVaultedShopper() {
-        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         vaultedShopper.setLastName(NEW_LAST_NAME);
 
-        bluesnapServiceImpl.updateVaultedShopper( SHOPPER_ID, vaultedShopper);
-        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID, vaultedShopper);
+        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
 
         assertNotNull(vaultedShopperResponse.getVaultedShopperId());
 
         String vaultedShopperIdResponse = vaultedShopperResponse.getVaultedShopperId().toString();
 
-        assertEquals( SHOPPER_ID, vaultedShopperIdResponse);
+        assertEquals(SHOPPER_ID, vaultedShopperIdResponse);
 
         String vaultedShopperRequestFirstName = vaultedShopper.getFirstName();
         String vaultedShopperResponseFirstName = vaultedShopperResponse.getFirstName();
@@ -261,13 +261,13 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldGetVaultedShopper() {
-        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         vaultedShopper.setLastName(NEW_LAST_NAME);
         assertNotNull(vaultedShopper.getVaultedShopperId());
 
         String vaultedShopperIdResponse = vaultedShopper.getVaultedShopperId().toString();
 
-        assertEquals( SHOPPER_ID, vaultedShopperIdResponse);
+        assertEquals(SHOPPER_ID, vaultedShopperIdResponse);
 
         assertNotNull(vaultedShopper.getFirstName());
         assertNotNull(vaultedShopper.getLastName());
@@ -275,18 +275,18 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldAddAnotherCardToVaultedShopper() {
-        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         CreditCardInfo creditCardInfo = buildCreditCardInfo2();
         PaymentSources paymentSources = vaultedShopper.getPaymentSources();
         List<CreditCardInfo> creditCardInfoList = paymentSources.getCreditCardInfo();
         creditCardInfoList.add(creditCardInfo);
         paymentSources.setCreditCardInfo(creditCardInfoList);
         vaultedShopper.setPaymentSources(paymentSources);
-        bluesnapServiceImpl.updateVaultedShopper( SHOPPER_ID, vaultedShopper);
-        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID, vaultedShopper);
+        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         assertNotNull(vaultedShopper.getVaultedShopperId());
 
-        assertEquals( SHOPPER_ID, vaultedShopper.getVaultedShopperId().toString());
+        assertEquals(SHOPPER_ID, vaultedShopper.getVaultedShopperId().toString());
         assertEquals(6, vaultedShopperResponse.getPaymentSources().getCreditCardInfo().size());
         Integer size = vaultedShopperResponse.getPaymentSources().getCreditCardInfo().size();
         size--;
@@ -322,51 +322,52 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldThrowExceptionInsteadOfGettingVendor() {
-        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.getVendor(null));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.getVendor(null));
 
     }
 
     @Test
     public void shouldThrowExceptionInsteadOfAddingVaultedShopper() {
         VaultedShopper vaultedShopper = buildBrokenVaultedShopper();
-        assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.createVaultedShopper(vaultedShopper));
+        assertThrows(BluesnapRESTException.class, () -> bluesnapServiceImpl.createVaultedShopper(vaultedShopper));
 
     }
 
     @Test
     public void shouldThrowExceptionInsteadUpdatingVaultedShopper() {
-        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID,null));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID, null));
 
     }
 
     @Test
     public void shouldThrowExceptionInsteadOfGettingVaultedShopper() {
-        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.getVaultedShopper(null));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.getVaultedShopper(null));
 
     }
 
     @Test
     public void shouldThrowExceptionInsteadOfAddingVendor() {
         Vendor vendor = buildBrokenVendor();
-        assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.createVendor(vendor));
+        assertThrows(BluesnapRESTException.class, () -> bluesnapServiceImpl.createVendor(vendor));
 
     }
 
     @Test
     public void shouldThrowExceptionInsteadUpdatingVendor() {
-        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.updateVendor(VENDOR_ID,null));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.updateVendor(VENDOR_ID, null));
 
     }
 
     @Test
     public void shouldThrowExceptionInsteadOfPayment() {
-        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.pay(null));
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.pay(null));
 
     }
+
     @Test
     public void shouldThrowRESTExceptionInsteadOfPayment() {
         CardTransaction cardTransaction = buildBrokenCardTransaction();
-        assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.pay(cardTransaction));
+        assertThrows(BluesnapRESTException.class, () -> bluesnapServiceImpl.pay(cardTransaction));
 
     }
 
@@ -425,7 +426,7 @@ public class BluesnapServiceImplTest {
         creditCard.setSecurityCode(111);
         creditCard.setCardLastFourDigits("9299");
         cardTransaction.setCreditCard(creditCard);
-       // cardTransaction.setCardTransactionType("AUTH_CAPTURE");
+        // cardTransaction.setCardTransactionType("AUTH_CAPTURE");
 
         VendorsInfo vendorsInfo = new VendorsInfo();
         List<VendorInfo> vendorsInfoList = new ArrayList<>();
@@ -474,6 +475,7 @@ public class BluesnapServiceImplTest {
         vendor.setPayoutInfo(payoutInfoList);
         return vendor;
     }
+
     private Vendor buildBrokenVendor() {
         //Mandatory
         Vendor vendor = new Vendor();
@@ -527,6 +529,7 @@ public class BluesnapServiceImplTest {
         vaultedShopper.setPaymentSources(paymentSources);
         return vaultedShopper;
     }
+
     private VaultedShopper buildBrokenVaultedShopper() {
         VaultedShopper vaultedShopper = new VaultedShopper();
         vaultedShopper.setEmail("vendor1example.com");
