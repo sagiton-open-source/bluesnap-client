@@ -11,12 +11,15 @@ import pl.sagiton.bluesnapclient.model.vaultedshopper.CreditCardInfo;
 import pl.sagiton.bluesnapclient.model.vaultedshopper.PaymentSources;
 import pl.sagiton.bluesnapclient.model.vaultedshopper.VaultedShopper;
 import pl.sagiton.bluesnapclient.model.vendors.*;
+import pl.sagiton.bluesnapclient.service.exceptions.BluesnapException;
+import pl.sagiton.bluesnapclient.service.exceptions.BluesnapRESTException;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BluesnapServiceImplTest {
     @Autowired
@@ -317,6 +320,25 @@ public class BluesnapServiceImplTest {
         assertEquals(creditCardExpirationYearRequest, creditCardExpirationYearResponse);
     }
 
+    @Test
+    public void shouldThrowExceptionInsteadOfGettingVendor() {
+        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.getVendor(null));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfAddingVendor() {
+        Vendor vendor = buildBrokenVendor();
+        assertThrows(BluesnapRESTException.class,() ->bluesnapServiceImpl.createVendor(vendor));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadUpdatingVendor() {
+        assertThrows(BluesnapException.class,() ->bluesnapServiceImpl.updateVendor(VENDOR_ID,null));
+
+    }
+
     private CardTransaction buildCardTransaction() {
         CardTransaction cardTransaction = new CardTransaction();
         cardTransaction.setAmount(50.0);
@@ -349,7 +371,6 @@ public class BluesnapServiceImplTest {
         cardTransaction.setVendorsInfo(vendorsInfo);
         return cardTransaction;
     }
-
     private Vendor buildVendor() {
         //Mandatory
         Vendor vendor = new Vendor();
@@ -387,6 +408,23 @@ public class BluesnapServiceImplTest {
         vendor.setPayoutInfo(payoutInfoList);
         return vendor;
     }
+    private Vendor buildBrokenVendor() {
+        //Mandatory
+        Vendor vendor = new Vendor();
+        vendor.setEmail("vendor1example.com");
+        vendor.setFirstName("Joe");
+        vendor.setLastName("Smith");
+        vendor.setPhone("+48592342543");
+        vendor.setAddress("123 Test st.");
+        vendor.setCity("Wroclaw");
+        vendor.setCountry("PL");
+        vendor.setZip("53-230");
+        vendor.setDefaultPayoutCurrency("EUR");
+        VendorAgreement vendorAgreement = new VendorAgreement();
+        vendorAgreement.setCommissionPercent("30");
+        vendor.setVendorAgreement(vendorAgreement);
+        return vendor;
+    }
 
     private PayoutInfo buildPayoutInfo() {
         PayoutInfo payoutInfo = new PayoutInfo();
@@ -411,6 +449,21 @@ public class BluesnapServiceImplTest {
     private VaultedShopper buildVaultedShopper() {
         VaultedShopper vaultedShopper = new VaultedShopper();
         vaultedShopper.setEmail("vendor1@example.com");
+        vaultedShopper.setFirstName("Joe");
+        vaultedShopper.setLastName("Smith");
+        vaultedShopper.setPhone("+48592342543");
+        vaultedShopper.setAddress("123 Test st.");
+        vaultedShopper.setCity("Wroclaw");
+        vaultedShopper.setCountry("PL");
+        vaultedShopper.setZip("53-230");
+        //below exclusive for card management
+        PaymentSources paymentSources = buildPaymentSources();
+        vaultedShopper.setPaymentSources(paymentSources);
+        return vaultedShopper;
+    }
+    private VaultedShopper buildBrokenVaultedShopper() {
+        VaultedShopper vaultedShopper = new VaultedShopper();
+        vaultedShopper.setEmail("vendor1example.com");
         vaultedShopper.setFirstName("Joe");
         vaultedShopper.setLastName("Smith");
         vaultedShopper.setPhone("+48592342543");
