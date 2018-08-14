@@ -13,6 +13,7 @@ import pl.sagiton.bluesnapclient.model.vendors.VendorList;
 import pl.sagiton.bluesnapclient.service.BluesnapService;
 import pl.sagiton.bluesnapclient.service.exceptions.BluesnapException;
 import pl.sagiton.bluesnapclient.service.interceptor.BasicAuthInterceptor;
+import pl.sagiton.bluesnapclient.service.interceptor.LoggingInterceptor;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -144,6 +145,7 @@ public class BluesnapServiceImpl implements BluesnapService {
         RestTemplate restTemplate = new RestTemplate();
         final List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
         interceptors.add(new BasicAuthInterceptor(bluesnapUsername, bluesnapPassword));
+        interceptors.add(new LoggingInterceptor());
         restTemplate.setInterceptors(interceptors);
         return restTemplate;
     }
