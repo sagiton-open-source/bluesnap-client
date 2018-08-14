@@ -1,26 +1,36 @@
 package pl.sagiton.bluesnapclient.service.exceptions;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
-import java.nio.charset.Charset;
 
-public class BluesnapException extends HttpClientErrorException {
+public class BluesnapException extends RuntimeException {
 
-    public BluesnapException(HttpStatus statusCode) {
-        super(statusCode);
+    public BluesnapException() {
     }
 
-    public BluesnapException(HttpStatus statusCode, String statusText) {
-        super(statusCode, statusText);
+    public BluesnapException(String message) {
+        super(message);
     }
 
-    public BluesnapException(HttpStatus statusCode, String statusText, byte[] responseBody, Charset responseCharset) {
-        super(statusCode, statusText, responseBody, responseCharset);
+    public BluesnapException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public BluesnapException(HttpStatus statusCode, String statusText, HttpHeaders responseHeaders, byte[] responseBody, Charset responseCharset) {
-        super(statusCode, statusText, responseHeaders, responseBody, responseCharset);
+    public BluesnapException(Throwable cause) {
+        super(cause);
     }
+
+    public BluesnapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public BluesnapException(HttpClientErrorException httpClientErrorException) {
+        super(httpClientErrorException.getStatusCode() + " " + httpClientErrorException.getStatusText());
+    }
+
+    public BluesnapException(RestClientException restClientException) {
+        super(restClientException.getMessage());
+    }
+
 }

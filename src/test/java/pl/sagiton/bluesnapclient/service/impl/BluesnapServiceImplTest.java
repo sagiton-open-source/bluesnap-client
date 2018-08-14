@@ -12,7 +12,6 @@ import pl.sagiton.bluesnapclient.model.vaultedshopper.PaymentSources;
 import pl.sagiton.bluesnapclient.model.vaultedshopper.VaultedShopper;
 import pl.sagiton.bluesnapclient.model.vendors.*;
 import pl.sagiton.bluesnapclient.service.exceptions.BluesnapException;
-import pl.sagiton.bluesnapclient.service.exceptions.BluesnapRESTException;
 
 import java.net.URI;
 import java.util.ArrayList;
