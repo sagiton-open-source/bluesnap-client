@@ -11,6 +11,7 @@ import pl.sagiton.bluesnapclient.model.vaultedshopper.CreditCardInfo;
 import pl.sagiton.bluesnapclient.model.vaultedshopper.PaymentSources;
 import pl.sagiton.bluesnapclient.model.vaultedshopper.VaultedShopper;
 import pl.sagiton.bluesnapclient.model.vendors.*;
+import pl.sagiton.bluesnapclient.service.exceptions.BluesnapException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -22,8 +23,8 @@ public class BluesnapServiceImplTest {
     @Autowired
     private BluesnapServiceImpl bluesnapServiceImpl;
     private static final String VENDOR_ID = "10400732";
-    private static final String SHOPPER_ID =  "22810565";
-    private static final String NEW_LAST_NAME ="NewLastName";
+    private static final String SHOPPER_ID = "22810565";
+    private static final String NEW_LAST_NAME = "NewLastName";
     private static final String NEW_FIRST_NAME = "NewName";
     private static final String NEW_ADDRESS = "new test address";
     private static final String VISA_TYPE = "VISA";
@@ -37,6 +38,7 @@ public class BluesnapServiceImplTest {
         MockitoAnnotations.initMocks(this);
         bluesnapServiceImpl = new BluesnapServiceImpl(BLUESNAP_ROOT_URI, BLUESNAP_USERNAME, BLUESNAP_PASSWORD);
     }
+
     @Test
     public void shouldCreateNewVendor() {
         Vendor vendor = buildVendor();
@@ -234,17 +236,17 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldUpdateVaultedShopper() {
-        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         vaultedShopper.setLastName(NEW_LAST_NAME);
 
-        bluesnapServiceImpl.updateVaultedShopper( SHOPPER_ID, vaultedShopper);
-        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID, vaultedShopper);
+        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
 
         assertNotNull(vaultedShopperResponse.getVaultedShopperId());
 
         String vaultedShopperIdResponse = vaultedShopperResponse.getVaultedShopperId().toString();
 
-        assertEquals( SHOPPER_ID, vaultedShopperIdResponse);
+        assertEquals(SHOPPER_ID, vaultedShopperIdResponse);
 
         String vaultedShopperRequestFirstName = vaultedShopper.getFirstName();
         String vaultedShopperResponseFirstName = vaultedShopperResponse.getFirstName();
@@ -258,13 +260,13 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldGetVaultedShopper() {
-        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         vaultedShopper.setLastName(NEW_LAST_NAME);
         assertNotNull(vaultedShopper.getVaultedShopperId());
 
         String vaultedShopperIdResponse = vaultedShopper.getVaultedShopperId().toString();
 
-        assertEquals( SHOPPER_ID, vaultedShopperIdResponse);
+        assertEquals(SHOPPER_ID, vaultedShopperIdResponse);
 
         assertNotNull(vaultedShopper.getFirstName());
         assertNotNull(vaultedShopper.getLastName());
@@ -272,18 +274,18 @@ public class BluesnapServiceImplTest {
 
     @Test
     public void shouldAddAnotherCardToVaultedShopper() {
-        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        VaultedShopper vaultedShopper = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         CreditCardInfo creditCardInfo = buildCreditCardInfo2();
         PaymentSources paymentSources = vaultedShopper.getPaymentSources();
         List<CreditCardInfo> creditCardInfoList = paymentSources.getCreditCardInfo();
         creditCardInfoList.add(creditCardInfo);
         paymentSources.setCreditCardInfo(creditCardInfoList);
         vaultedShopper.setPaymentSources(paymentSources);
-        bluesnapServiceImpl.updateVaultedShopper( SHOPPER_ID, vaultedShopper);
-        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper( SHOPPER_ID);
+        bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID, vaultedShopper);
+        VaultedShopper vaultedShopperResponse = bluesnapServiceImpl.getVaultedShopper(SHOPPER_ID);
         assertNotNull(vaultedShopper.getVaultedShopperId());
 
-        assertEquals( SHOPPER_ID, vaultedShopper.getVaultedShopperId().toString());
+        assertEquals(SHOPPER_ID, vaultedShopper.getVaultedShopperId().toString());
         assertEquals(6, vaultedShopperResponse.getPaymentSources().getCreditCardInfo().size());
         Integer size = vaultedShopperResponse.getPaymentSources().getCreditCardInfo().size();
         size--;
@@ -317,6 +319,58 @@ public class BluesnapServiceImplTest {
         assertEquals(creditCardExpirationYearRequest, creditCardExpirationYearResponse);
     }
 
+    @Test
+    public void shouldThrowExceptionInsteadOfGettingVendor() {
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.getVendor(null));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfAddingVaultedShopper() {
+        VaultedShopper vaultedShopper = buildBrokenVaultedShopper();
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.createVaultedShopper(vaultedShopper));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadUpdatingVaultedShopper() {
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.updateVaultedShopper(SHOPPER_ID, null));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfGettingVaultedShopper() {
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.getVaultedShopper(null));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfAddingVendor() {
+        Vendor vendor = buildBrokenVendor();
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.createVendor(vendor));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadUpdatingVendor() {
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.updateVendor(VENDOR_ID, null));
+
+    }
+
+    @Test
+    public void shouldThrowExceptionInsteadOfPayment() {
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.pay(null));
+
+    }
+
+    @Test
+    public void shouldThrowRESTExceptionInsteadOfPayment() {
+        CardTransaction cardTransaction = buildBrokenCardTransaction();
+        assertThrows(BluesnapException.class, () -> bluesnapServiceImpl.pay(cardTransaction));
+
+    }
+
+
     private CardTransaction buildCardTransaction() {
         CardTransaction cardTransaction = new CardTransaction();
         cardTransaction.setAmount(50.0);
@@ -339,6 +393,39 @@ public class BluesnapServiceImplTest {
         creditCard.setCardLastFourDigits("9299");
         cardTransaction.setCreditCard(creditCard);
         cardTransaction.setCardTransactionType("AUTH_CAPTURE");
+
+        VendorsInfo vendorsInfo = new VendorsInfo();
+        List<VendorInfo> vendorsInfoList = new ArrayList<>();
+        VendorInfo vendorInfo = new VendorInfo();
+        vendorInfo.setVendorId(581181L);
+        vendorsInfoList.add(vendorInfo);
+        vendorsInfo.setVendorInfo(vendorsInfoList);
+        cardTransaction.setVendorsInfo(vendorsInfo);
+        return cardTransaction;
+    }
+
+    private CardTransaction buildBrokenCardTransaction() {
+        CardTransaction cardTransaction = new CardTransaction();
+        cardTransaction.setAmount(50.0);
+        cardTransaction.setSoftDescriptor("DescTest");
+
+        CardHolder cardHolder = new CardHolder();
+        cardHolder.setFirstName("test1");
+        cardHolder.setLastName("tester");
+        cardHolder.setZip("53230");
+        cardHolder.setCountry("PL");
+        cardTransaction.setCardHolderInfo(cardHolder);
+
+        cardTransaction.setCurrency("EUR");
+
+        CreditCard creditCard = new CreditCard();
+        creditCard.setCardNumber("4263982640269299");
+        creditCard.setExpirationMonth(11);
+        creditCard.setExpirationYear(2018);
+        creditCard.setSecurityCode(111);
+        creditCard.setCardLastFourDigits("9299");
+        cardTransaction.setCreditCard(creditCard);
+        // cardTransaction.setCardTransactionType("AUTH_CAPTURE");
 
         VendorsInfo vendorsInfo = new VendorsInfo();
         List<VendorInfo> vendorsInfoList = new ArrayList<>();
@@ -388,6 +475,24 @@ public class BluesnapServiceImplTest {
         return vendor;
     }
 
+    private Vendor buildBrokenVendor() {
+        //Mandatory
+        Vendor vendor = new Vendor();
+        vendor.setEmail("vendor1example.com");
+        vendor.setFirstName("Joe");
+        vendor.setLastName("Smith");
+        vendor.setPhone("+48592342543");
+        vendor.setAddress("123 Test st.");
+        vendor.setCity("Wroclaw");
+        vendor.setCountry("PL");
+        vendor.setZip("53-230");
+        vendor.setDefaultPayoutCurrency("EUR");
+        VendorAgreement vendorAgreement = new VendorAgreement();
+        vendorAgreement.setCommissionPercent("30");
+        vendor.setVendorAgreement(vendorAgreement);
+        return vendor;
+    }
+
     private PayoutInfo buildPayoutInfo() {
         PayoutInfo payoutInfo = new PayoutInfo();
         payoutInfo.setPayoutType("SEPA"); //by us
@@ -411,6 +516,22 @@ public class BluesnapServiceImplTest {
     private VaultedShopper buildVaultedShopper() {
         VaultedShopper vaultedShopper = new VaultedShopper();
         vaultedShopper.setEmail("vendor1@example.com");
+        vaultedShopper.setFirstName("Joe");
+        vaultedShopper.setLastName("Smith");
+        vaultedShopper.setPhone("+48592342543");
+        vaultedShopper.setAddress("123 Test st.");
+        vaultedShopper.setCity("Wroclaw");
+        vaultedShopper.setCountry("PL");
+        vaultedShopper.setZip("53-230");
+        //below exclusive for card management
+        PaymentSources paymentSources = buildPaymentSources();
+        vaultedShopper.setPaymentSources(paymentSources);
+        return vaultedShopper;
+    }
+
+    private VaultedShopper buildBrokenVaultedShopper() {
+        VaultedShopper vaultedShopper = new VaultedShopper();
+        vaultedShopper.setEmail("vendor1example.com");
         vaultedShopper.setFirstName("Joe");
         vaultedShopper.setLastName("Smith");
         vaultedShopper.setPhone("+48592342543");
