@@ -8,6 +8,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,8 +28,16 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
         log.debug("Method      : {}", request.getMethod());
         HttpHeaders headersCopy = makeObfuscatedCopyOfRequestHeaders(request);
         log.debug("Headers     : {}", headersCopy);
-        log.debug("Request body: {}", new String(body, "UTF-8"));
+        byte[] bodyHashCodeBytes = convertBodyToHashcodeByteArray(body);
+        log.debug("Request body: {}", new String(bodyHashCodeBytes, "UTF-8")); //TODO obfuscate
         log.debug("==========================request end================================================");
+    }
+
+    private byte[] convertBodyToHashcodeByteArray(byte[] body) {
+        Integer bodyHashcode = body.hashCode();
+        String bodyHashCodeString = bodyHashcode.toString();
+        byte[] bodyHashCodeBytes = bodyHashCodeString.getBytes(StandardCharsets.UTF_8);
+        return bodyHashCodeBytes;
     }
 
     private HttpHeaders makeObfuscatedCopyOfRequestHeaders(HttpRequest request) {
@@ -57,4 +66,6 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
         String obfuscatedHeader = header.substring(0, replaceLength).replaceAll(".", "*") + lastTenCharacters;
         return obfuscatedHeader;
     }
+
+
 }
