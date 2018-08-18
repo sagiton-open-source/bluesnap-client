@@ -12,6 +12,7 @@ import pl.sagiton.bluesnapclient.model.vendors.Vendor;
 import pl.sagiton.bluesnapclient.model.vendors.VendorList;
 import pl.sagiton.bluesnapclient.service.BluesnapService;
 import pl.sagiton.bluesnapclient.service.exceptions.BluesnapException;
+import pl.sagiton.bluesnapclient.service.exceptions.BluesnapExceptionUtils;
 import pl.sagiton.bluesnapclient.service.interceptor.BasicAuthInterceptor;
 import pl.sagiton.bluesnapclient.service.interceptor.LoggingInterceptor;
 
@@ -43,10 +44,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             return restTemplate.postForObject(bluesnapRootUri + TRANSACTIONS_URI, cardTransaction, CardTransaction.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -56,10 +57,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             return restTemplate.getForObject(bluesnapRootUri + VAULTED_SHOPPER_URI + "/" + id, VaultedShopper.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -69,10 +70,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             return restTemplate.postForObject(bluesnapRootUri + VAULTED_SHOPPER_URI, vaultedShopper, VaultedShopper.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -82,10 +83,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             restTemplate.put(bluesnapRootUri + VAULTED_SHOPPER_URI + "/" + id, vaultedShopper, VaultedShopper.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -95,10 +96,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             return restTemplate.postForLocation(bluesnapRootUri + VENDORS_URI, vendor);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -108,10 +109,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             return restTemplate.getForObject(bluesnapRootUri + VENDORS_URI + "/" + id, Vendor.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -121,10 +122,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             restTemplate.put(bluesnapRootUri + VENDORS_URI + "/" + id, vendor, Vendor.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
@@ -134,10 +135,10 @@ public class BluesnapServiceImpl implements BluesnapService {
             return restTemplate.getForObject(bluesnapRootUri + VENDORS_URI, VendorList.class);
         } catch (HttpClientErrorException e) {
             log.debug(BLUESNAP_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         } catch (RestClientException e) {
             log.debug(BLUESNAP_REST_CLIENT_ERROR, e);
-            throw new BluesnapException(e);
+            throw BluesnapExceptionUtils.wrapException(new BluesnapException(e));
         }
     }
 
