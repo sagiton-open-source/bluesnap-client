@@ -9,6 +9,7 @@ buildscript {
 	dependencies {
         classpath "io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE"
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath "com.github.ksoichiro:gradle-build-info-plugin:0.2.0"
     }
 }
 
@@ -16,6 +17,7 @@ apply plugin: 'java-library'
 apply plugin: 'idea'
 apply plugin: 'com.bmuschko.nexus'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.github.ksoichiro.build.info"
 
 group = 'pl.sagiton'
 version = '0.1.0-SNAPSHOT'
