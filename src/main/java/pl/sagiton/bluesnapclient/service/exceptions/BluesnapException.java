@@ -26,7 +26,7 @@ public class BluesnapException extends RuntimeException {
     }
 
     public BluesnapException(HttpClientErrorException httpClientErrorException) {
-        super(httpClientErrorException.getStatusCode() + " " + httpClientErrorException.getStatusText());
+        super(httpClientErrorException.getStatusCode() + " " + httpClientErrorException.getMessage() + httpClientErrorException.toString());
     }
 
     public BluesnapException(RestClientException restClientException) {
