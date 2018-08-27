@@ -43,8 +43,27 @@ dependencies {
     api group: 'org.springframework', name: 'spring-web'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'//, version: '2.18.0'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
     testImplementation group: 'org.mockito', name: 'mockito-core'
+}
+
+generateBuildInfo {
+    doLast {
+        (project.tasks.jar as Jar).manifest.attributes(
+            BUILD_HOST:     InetAddress.localHost.canonicalHostName,
+            BUILD_USERNAME: System.env.USER
+        )
+        if (System.env.BUILD_NUMBER) { //it should be enough to check if we're running on Jenkins
+            (project.tasks.jar as Jar).manifest.attributes(
+                BUILD_NUMBER: System.env.BUILD_NUMBER,
+                BUILD_ID:     System.env.BUILD_ID,
+                BUILD_URL:    System.env.BUILD_URL,
+                NODE_NAME:    System.env.NODE_NAME,
+                JOB_NAME:     System.env.JOB_NAME,
+                JENKINS_URL:  System.env.JENKINS_URL
+            )
+        }
+    }
 }
 
 /*
