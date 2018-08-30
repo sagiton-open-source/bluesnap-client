@@ -1,0 +1,66 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.4.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+        jcenter()
+	}
+	dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE"
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
+apply plugin: 'java-library'
+apply plugin: 'idea'
+apply plugin: 'com.bmuschko.nexus'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'pl.sagiton'
+version = '0.1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    }
+    dependencies {
+        dependency group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.18.0'
+    }
+}
+
+dependencies {
+	compileOnly group: 'org.projectlombok', name: 'lombok'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    runtimeOnly group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    api group: 'org.springframework', name: 'spring-web'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'//, version: '2.18.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core'
+}
+
+/*
+* Remember to provide credentials for Nexus!
+* These are configured by setting project properties: nexusUsername and nexusPassword.
+*
+* You can do that with properties file (in repo or in your home directory) but remember not to commit
+* that file!
+*
+* In CI environment you can use environment variables:
+*
+*     export ORG_GRADLE_PROJECT_nexusUsername=...
+*     export ORG_GRADLE_PROJECT_nexusPassword=...
+*
+* See:
+* https://docs.gradle.org/current/userguide/userguide_single.html?_ga=2.157422650.1235070294.1533801411-1191488433.1516802291#sec:project_properties
+*/
+nexus {
+    repositoryUrl = 'https://nexus.sagiton.pl/repository/maven-releases/'
+    snapshotRepositoryUrl = 'https://nexus.sagiton.pl/repository/maven-snapshots/'
+}
